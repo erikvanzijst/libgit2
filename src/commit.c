@@ -218,10 +218,10 @@ int commit_parse_buffer(git_commit *commit, const void *data, size_t len)
 		return git__rethrow(error, "Failed to parse buffer");
 
 	/* parse commit message */
-	while (buffer <= buffer_end && *buffer == '\n')
+	while (buffer < buffer_end - 1 && *buffer == '\n')
 		buffer++;
 
-	if (buffer < buffer_end) {
+	if (buffer <= buffer_end) {
 		const char *line_end;
 		unsigned int i;
 		size_t message_len;
