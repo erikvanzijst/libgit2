@@ -262,12 +262,15 @@ int git_filebuf_hash(git_oid *oid, git_filebuf *file)
 	return GIT_SUCCESS;
 }
 
-int git_filebuf_commit_at(git_filebuf *file, const char *path)
+int git_filebuf_commit_at(git_filebuf *file, const char *path, mode_t mode)
 {
 	free(file->path_original);
 	file->path_original = git__strdup(path);
 	if (file->path_original == NULL)
 		return GIT_ENOMEM;
+
+	if (p_chmod(file->path_lock, mode))
+		return git__throw(GIT_EOSERR, "Failed to chmod locked file before committing");
 
 	return git_filebuf_commit(file);
 }

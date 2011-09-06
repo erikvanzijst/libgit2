@@ -82,7 +82,7 @@ int remove_object_files(const char *odb_dir, object_data *d)
 	return 0;
 }
 
-int remove_loose_object(const char *repository_folder, git_object *object)
+void locate_loose_object(const char *repository_folder, git_object *object, char **out, char **out_folder)
 {
 	static const char *objects_folder = "objects/";
 
@@ -103,6 +103,30 @@ int remove_loose_object(const char *repository_folder, git_object *object)
 	git_oid_pathfmt(ptr, git_object_id(object));
 	ptr += GIT_OID_HEXSZ + 1;
 	*ptr = 0;
+
+	*out = full_path;
+
+	if (out_folder)
+		*out_folder = top_folder;
+}
+
+int loose_object_mode(const char *repository_folder, git_object *object)
+{
+	char *object_path;
+	struct stat st;
+
+	locate_loose_object(repository_folder, object, &object_path, NULL);
+	assert(p_stat(object_path, &st) == 0);
+	free(object_path);
+
+	return st.st_mode;
+}
+
+int remove_loose_object(const char *repository_folder, git_object *object)
+{
+	char *full_path, *top_folder;
+
+	locate_loose_object(repository_folder, object, &full_path, &top_folder);
 
 	if (p_unlink(full_path) < 0) {
 		fprintf(stderr, "can't delete object file \"%s\"\n", full_path);

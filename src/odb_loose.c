@@ -688,7 +688,7 @@ int loose_backend__stream_fwrite(git_oid *oid, git_odb_stream *_stream)
 		return git__rethrow(error, "Failed to write loose backend");
 
 	stream->finished = 1;
-	return git_filebuf_commit_at(&stream->fbuf, final_path);
+	return git_filebuf_commit_at(&stream->fbuf, final_path, 0444);
 }
 
 int loose_backend__stream_write(git_odb_stream *_stream, const char *data, size_t len)
@@ -808,7 +808,7 @@ int loose_backend__write(git_oid *oid, git_odb_backend *_backend, const void *da
 	if ((error = git_futils_mkpath2file(final_path)) < GIT_SUCCESS)
 		goto cleanup;
 
-	return git_filebuf_commit_at(&fbuf, final_path);
+	return git_filebuf_commit_at(&fbuf, final_path, 0444);
 
 cleanup:
 	git_filebuf_cleanup(&fbuf);

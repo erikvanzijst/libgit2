@@ -672,6 +672,10 @@ BEGIN_TEST(write0, "write a new commit object from memory to disk")
 
 	must_be_true(strcmp(git_commit_message(commit), COMMIT_MESSAGE) == 0);
 
+#ifndef GIT_WIN32
+	must_be_true((loose_object_mode(REPOSITORY_FOLDER, (git_object *)commit) & 0777) == 0444);
+#endif
+
 	must_pass(remove_loose_object(REPOSITORY_FOLDER, (git_object *)commit));
 
 	git_commit_close(commit);
