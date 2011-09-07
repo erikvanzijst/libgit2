@@ -173,7 +173,7 @@ END_TEST
 BEGIN_TEST(init2, "Initialize and open a bare repo with a relative path escaping out of the current working directory")
 	char path_repository[GIT_PATH_MAX];
 	char current_workdir[GIT_PATH_MAX];
-	const int mode = 0755; /* or 0777 ? */
+	const int mode = 0777;
 	git_repository* repo;
 
 	must_pass(p_getcwd(current_workdir, sizeof(current_workdir)));
@@ -234,7 +234,7 @@ BEGIN_TEST(open2, "Open a bare repository with a relative path escaping out of t
 	char current_workdir[GIT_PATH_MAX];
 	char path_repository[GIT_PATH_MAX];
 
-	const int mode = 0755; /* or 0777 ? */
+	const int mode = 0777;
 	git_repository* repo;
 
 	/* Setup the repository to open */
@@ -386,7 +386,7 @@ BEGIN_TEST(discover0, "test discover")
 	char repository_path[GIT_PATH_MAX];
 	char sub_repository_path[GIT_PATH_MAX];
 	char found_path[GIT_PATH_MAX];
-	int mode = 0755;
+	int mode = 0777;
 
 	must_pass(append_ceiling_dir(ceiling_dirs,TEST_RESOURCES));
 	git_futils_mkdir_r(DISCOVER_FOLDER, mode);

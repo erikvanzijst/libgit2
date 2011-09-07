@@ -607,12 +607,13 @@ static int repo_init_createhead(git_repository *repo)
 
 static int repo_init_structure(const char *git_dir, int is_bare)
 {
-	const int mode = 0755; /* or 0777 ? */
+	const int git_dir_mode = is_bare ? 0777 : 0755;
+	const int mode = 0777;
 	int error;
 
 	char temp_path[GIT_PATH_MAX];
 
-	if (git_futils_mkdir_r(git_dir, mode))
+	if (git_futils_mkdir_r(git_dir, git_dir_mode))
 		return git__throw(GIT_ERROR, "Failed to initialize repository structure. Could not mkdir");
 
 	/* Hides the ".git" directory */

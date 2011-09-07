@@ -42,7 +42,7 @@ int write_object_data(char *file, void *data, size_t len)
 
 int write_object_files(const char *odb_dir, object_data *d)
 {
-	if (p_mkdir(odb_dir, 0755) < 0) {
+	if (p_mkdir(odb_dir, 0777) < 0) {
 		int err = errno;
 		fprintf(stderr, "can't make directory \"%s\"", odb_dir);
 		if (err == EEXIST)
@@ -51,7 +51,7 @@ int write_object_files(const char *odb_dir, object_data *d)
 		return -1;
 	}
 
-	if ((p_mkdir(d->dir, 0755) < 0) && (errno != EEXIST)) {
+	if ((p_mkdir(d->dir, 0777) < 0) && (errno != EEXIST)) {
 		fprintf(stderr, "can't make object directory \"%s\"\n", d->dir);
 		return -1;
 	}
@@ -116,6 +116,28 @@ int loose_object_mode(const char *repository_folder, git_object *object)
 	struct stat st;
 
 	locate_loose_object(repository_folder, object, &object_path, NULL);
+	assert(p_stat(object_path, &st) == 0);
+	free(object_path);
+
+	return st.st_mode;
+}
+
+int loose_object_dir_mode(const char *repository_folder, git_object *object)
+{
+	char *object_path;
+	size_t pos;
+	struct stat st;
+
+	locate_loose_object(repository_folder, object, &object_path, NULL);
+
+	pos = strlen(object_path);
+	while (pos--) {
+		if (object_path[pos] == '/') {
+			object_path[pos] = 0;
+			break;
+		}
+	}
+
 	assert(p_stat(object_path, &st) == 0);
 	free(object_path);
 

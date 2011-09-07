@@ -27,7 +27,7 @@ int git_futils_mv_atomic(const char *from, const char *to)
 
 int git_futils_mkpath2file(const char *file_path)
 {
-	const int mode = 0755; /* or 0777 ? */
+	const int mode = 0777;
 	int error = GIT_SUCCESS;
 	char target_folder_path[GIT_PATH_MAX];
 

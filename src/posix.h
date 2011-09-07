@@ -50,5 +50,6 @@ extern int p_getcwd(char *buffer_out, size_t size);
 #define p_rmdir(p) rmdir(p)
 #define p_chmod(p,m) chmod(p, m)
 #define p_close(fd) close(fd)
+#define p_umask(m) umask(m)
 
 #endif
