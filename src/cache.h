@@ -7,7 +7,7 @@
 
 #include "thread-utils.h"
 
-#define GIT_DEFAULT_CACHE_SIZE 128
+#define GIT_DEFAULT_CACHE_SIZE 262144
 
 typedef void (*git_cached_obj_freeptr)(void *);
 
